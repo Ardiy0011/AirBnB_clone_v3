@@ -16,6 +16,14 @@ def close_storage(exception):
     storage.close()
 
 
+@app.errorhandler(404)
+def not_found_error(error):
+    err = {
+        "error": "Not found"
+    }
+    return jsonify(err)
+
+
 if __name__ == "__main__":
     host = "0.0.0.0" if not getenv('HBNB_API_HOST') else getenv('HBNB_API_HOST')
     port = 5000 if not getenv('HBNB_API_PORT') else int(getenv('HBNB_API_PORT'))
