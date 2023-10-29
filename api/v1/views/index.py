@@ -1,6 +1,12 @@
 from flask import jsonify
 from api.v1.views import app_views
 from models import storage
+from models.amenity import Amenity
+from models.city import City
+from models.place import Place
+from models.review import Review
+from models.state import State
+from models.user import User
 
 
 @app_views.route('/status', methods=['GET'], strict_slashes=False)
@@ -8,14 +14,12 @@ def status():
     status = {'status': 'OK'}
     return jsonify(status)
 
-
-@app_views.route('/api/v1/stats', methods=['GET'])
+@app_views.route('/stats', methods=['GET'])
 def objectcount():
     """count objects in the class"""
-    from models.engine.db_storage import classes
-
+    classes = {"amenity": Amenity, "city": City,
+               "place": Place, "review": Review, "state": State, "user": User}
     counter = {}
-    for key in classes:
-        value = classes[key]
+    for key, value in classes.items():
         counter[key] = storage.count(value)
     return jsonify(counter)

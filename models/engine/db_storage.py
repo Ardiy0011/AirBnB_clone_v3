@@ -79,11 +79,13 @@ class DBStorage:
         """Retrieve an object based on ht eexistence of a 
         corresponding object class and ID if no id matches
         the object or viceversa return  none"""
-        if cls and id is True:
-            object = f"{cls.__name__}.{id}"
-            return self.__session.query(cls).get(object)
-        return None
+        if cls and id:
+            key = "{}.{}".format(cls.__name__, id)
+            return (self.all(cls)).get(key, None)
 
     def count(self, cls=None):
         '''class (optional)'''
-        return (len(self.all(cls)))
+        if cls:
+            return (len(self.all(cls)))
+        else:
+            return (len(self.all()))

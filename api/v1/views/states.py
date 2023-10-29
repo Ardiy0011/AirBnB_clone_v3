@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, abort
+from flask import Flask, jsonify, abort, request
 from models import storage
 from models.state import State
 from api.v1.views import app_views
@@ -11,11 +11,9 @@ def get_states():
     convert it into json format for http manipulationusing '''
     state_objects = storage.all('State')
     dict_representation = []
-    for state in state_objects:
-        state_list = state_objects[state]
-        dict_representation.append(state_list.to_dict())
+    for state in state_objects.values():
+        dict_representation.append(state.to_dict())
     return jsonify(dict_representation)
-
 
 @app_views.route('/states/<state_id>', methods=['GET'], strict_slashes=False)
 def get_state(state_id):
@@ -44,11 +42,31 @@ def delete_state(state_id):
 def create_state():
     """at this point my brain is too tire to think"""
 
-    return 201
+    data = request.json()
+    if not data:
+        return jsonify({"error": "Not a JSON"}), 400
+    if "name" not in data:
+        return jsonify({"error": "Missing name"}), 400
+    state = State(name=data['name'])
+    storage.new(state)
+    storage.save()
+    return jsonify(state.to_dict()), 201
 
 
 @app_views.route('/states/<state_id>', methods=['PUT'], strict_slashes=False)
-def update_state():
+def update_state(state_id):
     """at this point my brain is too tire to think"""
 
-    return 200
+    state = storage.get(State, state_id)
+    if state is None:
+        abort(404)
+    data = request.get_json()
+    if data is None:
+        return jsonify({"message": "Not a JSON"}), 400
+    ignored = ['id', 'created_at', 'updated_at']
+
+    for key, value in data.items():
+        if key not in ignored:
+            setattr(state, key, value)
+    storage.save()
+    return jsonify(state.to_dict()), 200
