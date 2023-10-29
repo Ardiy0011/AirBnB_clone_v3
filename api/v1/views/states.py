@@ -4,8 +4,8 @@ from models.state import State
 from api.v1.views import app_views
 
 
-@app_views.route('/api/v1/states', methods=['GET'], strict_slashes=False)
-def get_states():
+@app_views.route('/states', methods=['GET'], strict_slashes=False)
+def get_all_states():
     '''retrieve states objects, convert into its disctionary representaion 
     but calling the to dict function on the state object and then
     convert it into json format for http manipulationusing '''
@@ -17,7 +17,19 @@ def get_states():
     return jsonify(dict_representation)
 
 
-@app_views.route('/states/<state_id>', methods=['DELETE'], strict_slashes=False)
+@app_views.route('/states/<string:state_id>', methods=['GET'], strict_slashes=False)
+def get_one_state(state_id):
+    """get a particular state object based on corresposnding id else
+    return 404 error"""
+
+    particular_state = storage.get(State, state_id)
+    if particular_state is None:
+        abort(404)
+    dict_representation = particular_state.to_dict()
+    return jsonify(dict_representation), 200
+
+
+@app_views.route('/states/<string:state_id>', methods=['DELETE'], strict_slashes=False)
 def delete_state(state_id):
     """if state object does with a corresponding id is not found
     delete the the  particular state"""
@@ -35,14 +47,14 @@ def create_state():
     data = request.json()
     if not data:
         return jsonify({"error": "Not a JSON"}), 400
-    if "name" not in data:
+    if "name" not in data.keys():
         return jsonify({"error": "Missing name"}), 400
     state = State(name=data['name'])
     storage.new(state)
     storage.save()
     return jsonify(state.to_dict()), 201
 
-@app_views.route('/states/<state_id>', methods=['PUT'], strict_slashes=False)
+@app_views.route('/states/<string:state_id>', methods=['PUT'], strict_slashes=False)
 def update_state(state_id):
     """at this point my brain is too tire to think"""
 
