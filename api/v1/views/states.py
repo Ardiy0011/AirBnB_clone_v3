@@ -1,10 +1,10 @@
-from flask import Flask, jsonify, abort
+from flask import Flask, jsonify, abort, request
 from models import storage
 from models.state import State
 from api.v1.views import app_views
 
 
-@app_views.route('/states', methods=['GET'], strict_slashes=False)
+@app_views.route('/api/v1/states', methods=['GET'], strict_slashes=False)
 def get_states():
     '''retrieve states objects, convert into its disctionary representaion 
     but calling the to dict function on the state object and then
@@ -17,7 +17,7 @@ def get_states():
     return jsonify(dict_representation)
 
 
-@app_views.route('/states/<state_id>', methods=['GET'], strict_slashes=False)
+@app_views.route('/states/<string:state_id>', methods=['GET'], strict_slashes=False)
 def get_state(state_id):
     """get a particular state object based on corresposnding id else
     return 404 error"""
@@ -25,7 +25,7 @@ def get_state(state_id):
     if not particular_state:
         abort(404)
     dict_representation = particular_state.to_dict()
-    return jsonify(dict_representation)
+    return jsonify(dict_representation), 'OK'
 
 
 @app_views.route('/states/<state_id>', methods=['DELETE'], strict_slashes=False)
@@ -44,6 +44,11 @@ def delete_state(state_id):
 def create_state():
     """at this point my brain is too tire to think"""
 
+    response = request.get_json()
+    if not response:
+        abort(400, {'Not a JSON'})
+    if "name" not in response:
+        abort(400, {'Missing name'})
     return 201
 
 

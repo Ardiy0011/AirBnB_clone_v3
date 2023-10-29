@@ -1,3 +1,7 @@
+#!/usr/bin/python3
+"""errorhandling and status page"""
+
+
 from flask import jsonify
 from api.v1.views import app_views
 from models import storage
@@ -9,7 +13,7 @@ def status():
     return jsonify(status)
 
 
-@app_views.route('/api/v1/stats', methods=['GET'])
+@app_views.route('/stats', methods=['GET'])
 def objectcount():
     """count objects in the class"""
     from models.engine.db_storage import classes
