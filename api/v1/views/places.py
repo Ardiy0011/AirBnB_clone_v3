@@ -8,7 +8,8 @@ from models.city import City
 from api.v1.views import app_views
 
 
-@app_views.route('/cities/<city_id>/places', methods=['GET'], strict_slashes=False)
+@app_views.route('/cities/<city_id>/places', methods=['GET'],
+                 strict_slashes=False)
 def get_all_places(city_id):
     '''retrieve places objects, convert into its disctionary representaion
     but calling the to dict function on the state object and then
@@ -43,7 +44,8 @@ def delete_place(place_id):
     return jsonify({}), 200
 
 
-@app_views.route('/cities/<string:city_id>/places', methods=['POST'], strict_slashes=False)
+@app_views.route('/cities/<string:city_id>/places', methods=['POST'],
+                 strict_slashes=False)
 def create_Place(city_id):
     """at this point my brain is too tire to think"""
 
@@ -57,9 +59,7 @@ def create_Place(city_id):
     if "user_id" not in data:
         abort(404, description="Missing user_id")
 
-
-        "i stopped here we will continue here"  
-
+        "i stopped here we will continue here"
 
     if "name" not in data:
         abort(404, description="Missing name")
@@ -79,7 +79,7 @@ def update_Place(Place_id):
         abort(404)
     data = request.get_json()
     if data is None:
-        abort(400, description="Not a JSON")        
+        abort(400, description="Not a JSON")
     ignore = ['id', 'email', 'created_at', 'updated_at']
 
     for key, value in data.items():
