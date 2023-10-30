@@ -12,16 +12,13 @@ from api.v1.views import app_views
                  strict_slashes=False)
 def get_all_cities(state_id):
     """get particular cities in correspondnece to state id"""
-    state = storage.get(State, state_id)
-    if not state:
+    all_states = storage.all("State").values()
+    state_obj = [obj.to_dict() for obj in all_states if obj.id == state_id]
+    if state_obj == []:
         abort(404)
-
-    dict_representation = []
-    city_objects = storage.all('City')
-    for city in city_objects.values():
-        if city.state_id == state_id:
-            dict_representation.append(city.to_dict())
-    return jsonify(dict_representation)
+    list_cities = [obj.to_dict() for obj in storage.all("City").values()
+                   if state_id == obj.state_id]
+    return jsonify(list_cities)
 
 
 @app_views.route('/cities/<string:city_id>', methods=['GET'],

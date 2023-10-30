@@ -85,5 +85,7 @@ class DBStorage:
 
     def count(self, cls=None):
         '''class (optional)'''
-        obj_dict = models.storage.all(cls)
-        return len(obj_dict)
+        if cls:
+            return (len(self.all(cls)))
+        else:
+            return (len(self.all()))
