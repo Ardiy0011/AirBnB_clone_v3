@@ -8,20 +8,23 @@ from models.state import State
 from api.v1.views import app_views
 
 
-@app_views.route('/states/<string:state_id>/cities', methods=['GET'],
-                 strict_slashes=False)
-def get_all_cities(state_id):
+@app_views.route('/states/<state_id>/cities/', methods=['GET'],
+                 trict_slashes=False)
+def list_cities_of_state(state_id):
     """get particular cities in correspondnece to state id"""
-    all_states = storage.all("State").values()
-    state_obj = [obj.to_dict() for obj in all_states if obj.id == state_id]
-    if state_obj == []:
+    state = storage.get(State, state_id)
+    if not state:
         abort(404)
-    list_cities = [obj.to_dict() for obj in storage.all("City").values()
-                   if state_id == obj.state_id]
-    return jsonify(list_cities)
+
+    dict_representation = []
+    city_objects = storage.all('City')
+    for city in city_objects.values():
+        if city.state_id == state_id:
+            dict_representation.append(city.to_dict())
+    return jsonify(dict_representation)
 
 
-@app_views.route('/cities/<string:city_id>', methods=['GET'],
+@app_views.route('/cities/<city_id>', methods=['GET'],
                  trict_slashes=False)
 def get_one_city(city_id):
     """retrieve a particular city object based on corresposnding city id else
