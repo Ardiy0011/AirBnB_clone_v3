@@ -8,9 +8,10 @@ from models.amenity import Amenity
 from api.v1.views import app_views
 
 
-@app_views.route('/amenities', methods=['GET'], strict_slashes=False)
+@app_views.route('/amenities', methods=['GET'],
+                 strict_slashes=False)
 def get_all_states():
-    '''retrieve amenity objects, convert into its disctionary representaion 
+    '''retrieve amenity objects, convert into its disctionary representaion
     but calling the to dict function on the state object and then
     convert it into json format for http manipulationusing '''
 
@@ -21,7 +22,8 @@ def get_all_states():
     return jsonify(dict_representation)
 
 
-@app_views.route('/amenities/<amenity_id>', methods=['GET'], strict_slashes=False)
+@app_views.route('/amenities/<amenity_id>', methods=['GET'],
+                 strict_slashes=False)
 def get_one_state(amenity_id):
     """get a particular state object based on corresposnding id else
     return 404 error"""
@@ -33,7 +35,8 @@ def get_one_state(amenity_id):
     return jsonify(dict_representation), 200
 
 
-@app_views.route('/amenities/<amenity_id>', methods=['DELETE'], strict_slashes=False)
+@app_views.route('/amenities/<amenity_id>', methods=['DELETE'],
+                 strict_slashes=False)
 def delete_state(amenity_id):
     """if state object does with a corresponding id is not found
     delete the the  particular amenity"""
@@ -44,7 +47,9 @@ def delete_state(amenity_id):
     storage.save()
     return jsonify({}), 200
 
-@app_views.route('/amenities', methods=['POST'], strict_slashes=False)
+
+@app_views.route('/amenities', methods=['POST'],
+                 strict_slashes=False)
 def create_state():
     """at this point my brain is too tire to think"""
 
@@ -58,7 +63,9 @@ def create_state():
     storage.save()
     return jsonify(amenity.to_dict()), 201
 
-@app_views.route('/amenities/<amenity_id>', methods=['PUT'], strict_slashes=False)
+
+@app_views.route('/amenities/<amenity_id>', methods=['PUT'],
+                 strict_slashes=False)
 def update_state(amenity_id):
     """at this point my brain is too tire to think"""
 
