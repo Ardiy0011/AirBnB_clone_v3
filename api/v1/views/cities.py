@@ -6,7 +6,7 @@ from api.v1.views import app_views
 
 
 @app_views.route('/states/<string:state_id>/cities', methods=['GET'], strict_slashes=False)
-def get_cities(state_id):
+def get_all_cities(state_id):
     """get particular cities in correspondnece to state id"""
     state = storage.get(State, state_id)
     if not state:
@@ -21,7 +21,7 @@ def get_cities(state_id):
 
 
 @app_views.route('/cities/<string:city_id>', methods=['GET'], strict_slashes=False)
-def get_city(city_id):
+def get_one_city(city_id):
     """retrieve a particular city object based on corresposnding city id else
     return 404 error"""
     particular_city = storage.get(City, city_id)
@@ -56,8 +56,9 @@ def create_city(state_id):
         abort(400, {'error': 'Missing name'})
     """associate/link state id to the city object 
     you created that is found in the json pasrse data"""
-    data['state_id'] = state_id
     new_city = City(**data)
+    new_city.state_id = state_id
+    storage.new(new_city)
     new_city.save()
     return jsonify(new_city.to_dict()), 201
 

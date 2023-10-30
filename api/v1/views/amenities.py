@@ -1,42 +1,43 @@
 from flask import Flask, jsonify, abort, request
 from models import storage
 from models.state import State
+from models.amenity import Amenity
 from api.v1.views import app_views
 
 
-@app_views.route('/states', methods=['GET'], strict_slashes=False)
+@app_views.route('/amenities', methods=['GET'], strict_slashes=False)
 def get_all_states():
-    '''retrieve states objects, convert into its disctionary representaion 
+    '''retrieve amenity objects, convert into its disctionary representaion 
     but calling the to dict function on the state object and then
     convert it into json format for http manipulationusing '''
 
-    state_objects = storage.all('State')
+    amenity_objects = storage.all('Amenity')
     dict_representation = []
-    for state in state_objects.values():
-        dict_representation.append(state.to_dict())
+    for amenity in amenity_objects.values():
+        dict_representation.append(amenity.to_dict())
     return jsonify(dict_representation)
 
 
-@app_views.route('/states/<string:state_id>', methods=['GET'], strict_slashes=False)
-def get_one_state(state_id):
+@app_views.route('/amenities/<amenity_id>', methods=['GET'], strict_slashes=False)
+def get_one_state(amenity_id):
     """get a particular state object based on corresposnding id else
     return 404 error"""
 
-    particular_state = storage.get(State, state_id)
-    if particular_state is None:
+    amenity = storage.get(Amenity, amenity_id)
+    if amenity is None:
         abort(404)
-    dict_representation = particular_state.to_dict()
+    dict_representation = amenity.to_dict()
     return jsonify(dict_representation), 200
 
 
-@app_views.route('/states/<string:state_id>', methods=['DELETE'], strict_slashes=False)
-def delete_state(state_id):
+@app_views.route('/amenities/<amenity_id>', methods=['DELETE'], strict_slashes=False)
+def delete_state(amenity_id):
     """if state object does with a corresponding id is not found
     delete the the  particular state"""
-    particular_state = storage.get(State, state_id)
-    if not particular_state:
+    amenity = storage.get(amenity, amenity_id)
+    if not amenity:
         abort(404)
-    storage.delete(particular_state)
+    storage.delete(amenity)
     storage.save()
     return jsonify({}), 200
 
