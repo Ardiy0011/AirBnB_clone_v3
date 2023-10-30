@@ -12,7 +12,6 @@ from models.review import Review
 from models.state import State
 from models.user import User
 
-
 classes = {"Amenity": Amenity, "BaseModel": BaseModel, "City": City,
            "Place": Place, "Review": Review, "State": State, "User": User}
 
@@ -71,13 +70,14 @@ class FileStorage:
         self.reload()
 
     def get(self, cls, id):
-        """Retrieve an object based on ht eexistence of a 
-        corresponding object class and ID if no id matches
-        the object or viceversa return  none"""
-        if cls and id is True:
-            key = f"{cls.__name__}.{id}"
-            return self.all(cls).get(key, None)
+        '''object to get'''
+        if cls and id:
+            takeObj = '{}.{}'.format(cls, id)
+            everyObj = self.all(cls)
+            return everyObj.get(takeObj)
+        else:
+            return None
 
     def count(self, cls=None):
-        '''class (optional)'''
-        return (len(self.all(cls))) if cls else len(self.all())
+        '''class that is (optional)'''
+        return (len(self.all(cls)))
