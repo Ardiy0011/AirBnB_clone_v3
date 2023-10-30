@@ -5,6 +5,7 @@ from flask import Flask, jsonify, abort, request
 from models import storage
 from models.place import Place
 from models.city import City
+from models.user import User
 from api.v1.views import app_views
 
 
@@ -54,36 +55,38 @@ def create_Place(city_id):
     data = request.get_json()
     if data is None:
         abort(400, description="Not a JSON")
+
     if "user_id" not in data:
         abort(404, description="Missing user_id")
-
-
-        "i stopped here we will continue here"  
-
-
+    user_id = data['user_id']
+    user = storage.get(User, user_id)
+    if not user:
+        abort(404)
     if "name" not in data:
         abort(404, description="Missing name")
-    Place = Place(**data)
-    storage.new(Place)
+    data['city_id'] = city_id
+
+    place = Place(**data)
+    storage.new(place)
     storage.save()
-    return jsonify(Place.to_dict()), 201
+    return jsonify(place.to_dict()), 201
 
 
-@app_views.route('/Places/<string:Place_id>', methods=['PUT'],
+@app_views.route('/places/<place_id>', methods=['PUT'],
                  strict_slashes=False)
-def update_Place(Place_id):
+def update_Place(place_id):
     """at this point my brain is too tire to think"""
 
-    Place = storage.get(Place, Place_id)
-    if Place is None:
+    place = storage.get(Place, place_id)
+    if place is None:
         abort(404)
     data = request.get_json()
     if data is None:
         abort(400, description="Not a JSON")        
-    ignore = ['id', 'email', 'created_at', 'updated_at']
+    ignore = ['id', 'user_id', 'city_id', 'created_at', 'updated_at']
 
     for key, value in data.items():
         if key not in ignore:
-            setattr(Place, key, value)
+            setattr(place, key, value)
     storage.save()
-    return jsonify(Place.to_dict()), 200
+    return jsonify(place.to_dict()), 200
