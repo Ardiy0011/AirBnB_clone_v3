@@ -25,6 +25,6 @@ def objectcount():
     classes = {"amenity": Amenity, "city": City,
                "place": Place, "review": Review, "state": State, "user": User}
     counter = {}
-    for key, value in classes.items():
-        counter[key] = storage.count(value)
+    for key in classes:
+        counter[key] = storage.count(classes[key])
     return jsonify(counter)
