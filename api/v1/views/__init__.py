@@ -1,3 +1,6 @@
+#!/usr/bin/python3
+"""model for init link"""
+
 from api.v1.views.states import *
 from api.v1.views.index import *
 from flask import Blueprint
