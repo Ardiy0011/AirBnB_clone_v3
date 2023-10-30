@@ -8,9 +8,9 @@ from models.state import State
 from api.v1.views import app_views
 
 
-@app_views.route('/states/<state_id>/cities/', methods=['GET'],
-                 trict_slashes=False)
-def list_cities_of_state(state_id):
+@app_views.route('/states/<string:state_id>/cities', methods=['GET'],
+                 strict_slashes=False)
+def get_all_cities(state_id):
     """get particular cities in correspondnece to state id"""
     state = storage.get(State, state_id)
     if not state:
@@ -24,7 +24,7 @@ def list_cities_of_state(state_id):
     return jsonify(dict_representation)
 
 
-@app_views.route('/cities/<city_id>', methods=['GET'],
+@app_views.route('/cities/<string:city_id>', methods=['GET'],
                  trict_slashes=False)
 def get_one_city(city_id):
     """retrieve a particular city object based on corresposnding city id else
