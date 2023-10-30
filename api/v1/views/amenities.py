@@ -41,6 +41,7 @@ def delete_state(amenity_id):
     storage.save()
     return jsonify({}), 200
 
+
 @app_views.route('/states', methods=['POST'], strict_slashes=False)
 def create_state():
     """at this point my brain is too tire to think"""
@@ -54,6 +55,7 @@ def create_state():
     storage.new(state)
     storage.save()
     return jsonify(state.to_dict()), 201
+
 
 @app_views.route('/states/<string:state_id>', methods=['PUT'], strict_slashes=False)
 def update_state(state_id):

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """errorhandling and status page"""
+
 from flask import jsonify
 from api.v1.views import app_views
 from models import storage
@@ -13,8 +14,10 @@ from models.user import User
 
 @app_views.route('/status', methods=['GET'], strict_slashes=False)
 def status():
+    """function that send out status codes"""
     status = {'status': 'OK'}
     return jsonify(status)
+
 
 @app_views.route('/stats', methods=['GET'], strict_slashes=False)
 def objectcount():
