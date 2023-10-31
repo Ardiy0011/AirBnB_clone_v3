@@ -31,8 +31,7 @@ def get_one_amenity(amenity_id):
     amenity = storage.get(Amenity, amenity_id)
     if amenity is None:
         abort(404)
-    dict_representation = amenity.to_dict()
-    return jsonify(dict_representation), 200
+    return jsonify(amenity.to_dict())
 
 
 @app_views.route('/amenities/<amenity_id>', methods=['DELETE'],
@@ -40,7 +39,7 @@ def get_one_amenity(amenity_id):
 def delete_amenity(amenity_id):
     """if state object does with a corresponding id is not found
     delete the the  particular amenity"""
-    amenity = storage.get(amenity, amenity_id)
+    amenity = storage.get(Amenity, amenity_id)
     if not amenity:
         abort(404)
     storage.delete(amenity)
@@ -55,9 +54,9 @@ def create_amenity():
 
     data = request.get_json()
     if data is None:
-        return jsonify({"error": "Not a JSON"}), 400
+        abort(400, description="Not a JSON")
     if "name" not in data:
-        return jsonify({"error": "Missing name"}), 400
+        abort(400, description="Missing name")
     amenity = Amenity(name=data['name'])
     storage.new(amenity)
     storage.save()

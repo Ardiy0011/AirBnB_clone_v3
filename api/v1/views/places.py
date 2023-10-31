@@ -39,8 +39,8 @@ def get_a_place(place_id):
 def delete_place(place_id):
     """if Place object does with a corresponding id is not found
     delete the particular Place"""
-    Place = storage.get(Place, place_id)
-    storage.delete(Place) if Place else abort(404)
+    place = storage.get(Place, place_id)
+    storage.delete(place) if Place else abort(404)
     storage.save()
     return jsonify({}), 200
 
