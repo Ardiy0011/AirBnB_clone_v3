@@ -17,12 +17,12 @@ def get_all_places(city_id):
     convert it into json format for http manipulationusing '''
 
     city = storage.get(City, city_id)
-    dict = []
+    place_dict = []
     if city is None:
         abort(404)
     for place in city.places:
-        dict.append(place.to_dict())
-    return jsonify(dict)
+        place_dict.append(place.to_dict())
+    return jsonify(place_dict)
 
 
 @app_views.route('places/<string:place_id>', methods=['GET'],
