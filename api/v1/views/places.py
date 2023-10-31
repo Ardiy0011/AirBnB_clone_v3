@@ -40,14 +40,16 @@ def delete_place(place_id):
     """if Place object does with a corresponding id is not found
     delete the particular Place"""
     place = storage.get(Place, place_id)
-    storage.delete(place) if place else abort(404)
+    if place is None:
+        abort(404)
+    storage.delete(place)
     storage.save()
     return jsonify({}), 200
 
 
 @app_views.route('/cities/<string:city_id>/places', methods=['POST'],
                  strict_slashes=False)
-def create_Place(city_id):
+def create_place(city_id):
     """at this point my brain is too tire to think"""
 
     city = storage.get(City, city_id)
@@ -60,8 +62,7 @@ def create_Place(city_id):
 
     if "user_id" not in data:
         abort(404, description="Missing user_id")
-    user_id = data['user_id']
-    user = storage.get(User, user_id)
+    user = storage.get(User, data['user_id'])
     if not user:
         abort(404)
     if "name" not in data:
@@ -76,7 +77,7 @@ def create_Place(city_id):
 
 @app_views.route('/places/<place_id>', methods=['PUT'],
                  strict_slashes=False)
-def update_Place(place_id):
+def update_place(place_id):
     """at this point my brain is too tire to think"""
 
     place = storage.get(Place, place_id)
