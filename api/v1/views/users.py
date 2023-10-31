@@ -26,7 +26,7 @@ def get_all_users():
 def get_one_user(user_id):
     """get a particular state object based on corresposnding id else
     return 404 error"""
-    user = storage.get(State, user_id)
+    user = storage.get(User, user_id)
     return jsonify(user.to_dict()) if user else abort(404)
 
 
@@ -35,7 +35,7 @@ def get_one_user(user_id):
 def delete_user(user_id):
     """if user object does with a corresponding id is not found
     delete the particular user"""
-    user = storage.get(State, user_id)
+    user = storage.get(User, user_id)
     storage.delete(user) if user else abort(404)
     storage.save()
     return jsonify({}), 200
