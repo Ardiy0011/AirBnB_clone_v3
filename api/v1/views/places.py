@@ -17,11 +17,9 @@ def get_all_places(city_id):
     convert it into json format for http manipulationusing '''
 
     city = storage.get(City, city_id)
-    place_dict = []
     if city is None:
         abort(404)
-    for place in city.places:
-        place_dict.append(place.to_dict())
+    place_dict = [place.to_dict() for place in city.places]
     return jsonify(place_dict)
 
 
@@ -31,7 +29,9 @@ def get_a_place(place_id):
     """get a particular state object based on corresposnding id else
     return 404 error"""
     place = storage.get(Place, place_id)
-    return jsonify(place.to_dict()) if place else abort(404)
+    if not place:
+        abort(404)
+    return jsonify(place.to_dict())
 
 
 @app_views.route('/places/<place_id>', methods=['DELETE'],
@@ -40,7 +40,7 @@ def delete_place(place_id):
     """if Place object does with a corresponding id is not found
     delete the particular Place"""
     place = storage.get(Place, place_id)
-    storage.delete(place) if Place else abort(404)
+    storage.delete(place) if place else abort(404)
     storage.save()
     return jsonify({}), 200
 
