@@ -10,7 +10,7 @@ from api.v1.views import app_views
 
 @app_views.route('/amenities', methods=['GET'],
                  strict_slashes=False)
-def get_all_states():
+def get_all_amenities():
     '''retrieve amenity objects, convert into its disctionary representaion
     but calling the to dict function on the state object and then
     convert it into json format for http manipulationusing '''
@@ -24,7 +24,7 @@ def get_all_states():
 
 @app_views.route('/amenities/<amenity_id>', methods=['GET'],
                  strict_slashes=False)
-def get_one_state(amenity_id):
+def get_one_amenity(amenity_id):
     """get a particular state object based on corresposnding id else
     return 404 error"""
 
@@ -37,7 +37,7 @@ def get_one_state(amenity_id):
 
 @app_views.route('/amenities/<amenity_id>', methods=['DELETE'],
                  strict_slashes=False)
-def delete_state(amenity_id):
+def delete_amenity(amenity_id):
     """if state object does with a corresponding id is not found
     delete the the  particular amenity"""
     amenity = storage.get(amenity, amenity_id)
@@ -50,7 +50,7 @@ def delete_state(amenity_id):
 
 @app_views.route('/amenities', methods=['POST'],
                  strict_slashes=False)
-def create_state():
+def create_amenity():
     """at this point my brain is too tire to think"""
 
     data = request.get_json()
@@ -66,7 +66,7 @@ def create_state():
 
 @app_views.route('/amenities/<amenity_id>', methods=['PUT'],
                  strict_slashes=False)
-def update_state(amenity_id):
+def update_amenities(amenity_id):
     """at this point my brain is too tire to think"""
 
     amenity = storage.get(Amenity, amenity_id)

@@ -25,7 +25,7 @@ def get_all_cities(state_id):
 
 
 @app_views.route('/cities/<string:city_id>', methods=['GET'],
-                 trict_slashes=False)
+                 strict_slashes=False)
 def get_one_city(city_id):
     """retrieve a particular city object based on corresposnding city id else
     return 404 error"""

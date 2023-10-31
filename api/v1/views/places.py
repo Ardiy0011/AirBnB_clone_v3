@@ -84,7 +84,7 @@ def update_Place(place_id):
         abort(404)
     data = request.get_json()
     if data is None:
-        abort(400, description="Not a JSON")        
+        abort(400, description="Not a JSON")
     ignore = ['id', 'email', 'created_at', 'updated_at']
 
     for key, value in data.items():

@@ -10,7 +10,8 @@ from models.user import User
 from api.v1.views import app_views
 
 
-@app_views.route('/places/<place_id>/dict', methods=['GET'], strict_slashes=False)
+@app_views.route('/places/<place_id>/reviews', methods=['GET'],
+                 strict_slashes=False)
 def get_all_dict(place_id):
     '''retrieve states objects, convert into its disctionary representaion
     but calling the to dict function on the state object and then
@@ -45,7 +46,8 @@ def delete_reviews(review_id):
     return jsonify({}), 200
 
 
-@app_views.route('/places/<place_id>/reviews', methods=['POST'], strict_slashes=False)
+@app_views.route('/places/<place_id>/reviews', methods=['POST'],
+                 strict_slashes=False)
 def create_review(place_id):
     """ create Review """
 
@@ -56,14 +58,13 @@ def create_review(place_id):
     if data is None:
         abort(400, description="Not a JSON")
     if "user_id" not in data:
-        abort(404, description="Missing user_id")    
+        abort(404, description="Missing user_id")
     user_id = data['user_id']
     if "text" not in data:
         abort(404, description="Missing text")
     user = storage.get(User, user_id)
     if user is None:
         abort(404)
-    
     data['place_id'] = place_id
     review = Review(**data)
     storage.new(review)
@@ -81,9 +82,8 @@ def update_reviews(review_id):
         abort(404)
     data = request.get_json()
     if data is None:
-        abort(400, description="Not a JSON")        
+        abort(400, description="Not a JSON")
     ignore = ['id', 'user_id', 'place_id', 'created_at', 'updated_at']
-
     for key, value in data.items():
         if key not in ignore:
             setattr(review, key, value)
